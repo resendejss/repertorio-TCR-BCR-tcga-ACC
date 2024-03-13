@@ -7,6 +7,52 @@
 #
 ################################################################################
 
+setwd("~/GitHub/repertorio-TCR-BCR-tcga-ACC/03_exploratory_analysis")
+
+load("tableGeneral.RData")
+load("clinical.RData")
+load("tcgaACC_pre_processed.RData")
+
+sample_id <- read.csv("sampleidReads.csv")
+
+barcodes <- sample_id$barcode[match(gsub("_report","",unique(tableGeneral$sample_id)),
+                                    sample_id$sample_id)]
+
+# -- gender
+table(clinical$gender[clinical$submitter_id %in% substr(barcodes,1,12)])
+clinical$age_at_index[match(sample_id)]
+
+# -- age
+mean(clinical$age_at_index[clinical$submitter_id %in% substr(barcodes,1,12)])
+range(clinical$age_at_index[clinical$submitter_id %in% substr(barcodes,1,12)])
+
+# -- HSP and LSP
+table(tcgaACC$Steroid[tcgaACC$patient %in% substr(barcodes,1,12)])
+
+sum(tableGeneral$Abundance[tableGeneral$chain == "IGH" |
+      tableGeneral$chain == "IGHA1" | tableGeneral$chain == "IGHA2"
+    | tableGeneral$chain == "IGHD" | tableGeneral$chain == "IGHE"
+    | tableGeneral$chain == "IGHG1"| tableGeneral$chain == "IGHG2"
+    | tableGeneral$chain == "IGHG3" | tableGeneral$chain == "IGHG4"
+    | tableGeneral$chain == "IGHM" | tableGeneral$chain == "IGK"
+    | tableGeneral$chain == "IGL"])
+
+sum(tableGeneral$Abundance[tableGeneral$chain == "TRA" |
+                             tableGeneral$chain == "TRB" | tableGeneral$chain == "TRD"
+                           | tableGeneral$chain == "TRG"])
+
+sum(tableGeneral$Abundance)
+200596 + 1399
+
+
+table(tableGeneral$chain)
+
+200596 / 76
+
+
+
+
+
 barcode_tcga_rnaseq <- tcgaACC$barcode
 idx <- match(gsub("_report","",unique(tableGeneral$sample_id)),
              coldataACC$sample_id)
