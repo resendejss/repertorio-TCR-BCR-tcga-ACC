@@ -20,7 +20,6 @@ barcodes <- sample_id$barcode[match(gsub("_report","",unique(tableGeneral$sample
 
 # -- gender
 table(clinical$gender[clinical$submitter_id %in% substr(barcodes,1,12)])
-clinical$age_at_index[match(sample_id)]
 
 # -- age
 mean(clinical$age_at_index[clinical$submitter_id %in% substr(barcodes,1,12)])
