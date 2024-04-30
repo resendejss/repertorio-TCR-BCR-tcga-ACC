@@ -1,0 +1,478 @@
+library(RColorBrewer)
+library(circlize)
+library(ComplexHeatmap)
+library(dplyr)
+library(tidyr)
+library(tibble)
+
+# -- ABUNDANCE -- ##############################################################
+load("data/coldataACC.RData")
+load("data/tableGeneral.RData")
+
+# -- heatmap vdjtools
+
+## -- data
+data <- tableGeneral %>%
+  group_by(sample_id, chain) %>%
+  #summarize(Abundance = sum(Abundance)) %>%
+  summarize(Abundance) %>%
+  pivot_wider(names_from = chain,
+              values_from = Abundance,
+              values_fill = NA)
+
+data <- data[,c(1,2,12:17)]
+data <- column_to_rownames(data, "sample_id")
+
+data <- as.matrix(t(data))
+
+## -- ordenacao
+coldataACC$sum_TCR_BCR <-coldataACC$TCR + coldataACC$BCR
+coldata <- coldataACC %>%
+  arrange(desc(steroid), desc(sum_TCR_BCR))
+
+nrow(coldata)
+ncol(data)
+
+coldata <- coldata[!is.na(coldata$sample_id),]
+
+rownames(coldata) <- coldata$sample_id
+colnames(data) <- gsub("_report","",colnames(data))
+all(rownames(coldata) %in% colnames(data))
+
+idx <- match(rownames(coldata), colnames(data))
+data <- data[,idx]
+
+all(rownames(coldata) == colnames(data))
+
+nrow(coldata)
+ncol(data)
+
+## -- transformacao z-score
+data <- log2(data + 1)
+
+data <- as.matrix(t(scale(t(data))))
+summary(t(data))
+
+## -- setando extremidades
+data[data > 2] <- 2
+data[data < (-2)] <- (-2)
+
+# -- cores dos metadados
+col.bin.steroid <- c("Steroid_High"="black", "Steroid_Low"="gray")
+col.bin.gender <- c("female"="grey", "male"="black")
+col.bin.cortisol <- c("Cortisol"="black","No"="grey")
+col.bin.vital_status <- c("Alive"="grey", "Dead"="black")
+
+col.stage <- c("stage i"= "#bdbdbd", "stage ii"="#969696",
+               "stage iii"="#525252","stage iv"="#000000",
+               "not reported"="#ffffff")
+col.imm_sub <- c("C1"="#ffffff", "C2"="#d9d9d9", "C3"="#969696",
+                 "C4"="#525252", "C5"="#252525", "C6"="#000000")
+col.oth_horm <- c("Mineralcorticoids"="#000000", "Sexual"="#525252", "No"="#bdbdbd")
+
+col.seq_greys.read <- colorRamp2(breaks = seq(21000000, 83000000, length.out=9),
+                                 colors = brewer.pal(9,"Greys"))
+col.seq_greys <- colorRamp2(breaks = seq(0, 4, length.out=9),
+                            colors = brewer.pal(9,"Greys"))
+
+col.ha <- HeatmapAnnotation(steroid = coldata$steroid,
+                            immune_subtype = coldata$immune.subtype,
+                            other.hormones = coldata$other.hormones,
+                            cortisol.excess = coldata$cortisol.excess,
+                            tumor_stage = coldata$tumor_stage,
+                            gender = coldata$gender,
+                            vital_status = coldata$vital_status,
+                            count_TCR_log10 = log10(coldata$TCR + 1),
+                            count_BCR_log10 = log10(coldata$BCR + 1),
+                            count_reads = coldata$reads,
+                            col = list(steroid=col.bin.steroid,
+                                       immune_subtype = col.imm_sub,
+                                       other.hormones = col.oth_horm,
+                                       cortisol.excess = col.bin.cortisol,
+                                       tumor_stage = col.stage,
+                                       gender = col.bin.gender,
+                                       vital_status = col.bin.vital_status,
+                                       count_TCR_log10 = col.seq_greys,
+                                       count_BCR_log10 = col.seq_greys,
+                                       count_reads = col.seq_greys.read))
+
+row.ha <- rowAnnotation(type=c(rep("B",3), rep("T",4)))
+df <- as.data.frame(data)
+df$cell_type <- c(rep("B",3), rep("T",4))
+
+
+rm(col.bin.cortisol, col.bin.gender, col.bin.steroid, col.bin.vital_status,
+   col.imm_sub, col.oth_horm, col.stage, col.seq_greys, col.seq_greys.read)
+
+g1 <- Heatmap(data,
+              split = df$cell_type,
+              top_annotation = col.ha,
+              show_column_names = FALSE,
+              cluster_columns = FALSE,
+              cluster_rows = F,
+              col=colorRamp2(breaks = seq(-2,2, length.out=9),
+                             colors = rev(brewer.pal(9,"BrBG"))),
+              row_title_gp = gpar(fontsize=10),
+              row_title_side = "left",
+              row_names_side = "right",
+              row_names_gp = gpar(fontsize=10))
+
+rm(col.ha, coldata, coldataACC, data,tableGeneral,idx,df,row.ha)
+
+#-- EXPRESSAO -- ###############################################################
+
+load("data/coldataACC.RData")
+load("data/tableGeneral.RData")
+
+## -- data
+data <- tableGeneral %>%
+  group_by(sample_id, chain) %>%
+  summarize(Abundance) %>%
+  pivot_wider(names_from = chain,
+              values_from = Abundance,
+              values_fill = NA)
+
+data <- data[,c(1,2,12:17)]
+data <- column_to_rownames(data, "sample_id")
+rownames(data) <- gsub("_report","",rownames(data))
+
+coldataACC <- coldataACC[!is.na(coldataACC$reads),]
+
+for (i in colnames(data)) {
+  for (j in rownames(data) ) {
+    data[j,i] <- data[j,i]/coldataACC$reads[coldataACC$sample_id == j] 
+  }
+}
+
+data <- as.matrix(t(data))
+
+## -- ordenacao
+coldataACC$sum_TCR_BCR <-coldataACC$TCR + coldataACC$BCR
+coldata <- coldataACC %>%
+  arrange(desc(steroid), desc(sum_TCR_BCR))
+
+nrow(coldata)
+ncol(data)
+
+coldata <- coldata[!is.na(coldata$sample_id),]
+
+rownames(coldata) <- coldata$sample_id
+all(rownames(coldata) %in% colnames(data))
+
+idx <- match(rownames(coldata), colnames(data))
+data <- data[,idx]
+
+all(rownames(coldata) == colnames(data))
+
+nrow(coldata)
+ncol(data)
+
+## -- transformacao z-score
+data <- log2(data + 1)
+
+data <- as.matrix(t(scale(t(data))))
+summary(t(data))
+
+## -- setando extremidades
+data[data > 2] <- 2
+data[data < (-2)] <- (-2)
+
+# -- cores dos metadados
+col.bin.steroid <- c("Steroid_High"="black", "Steroid_Low"="gray")
+col.bin.gender <- c("female"="grey", "male"="black")
+col.bin.cortisol <- c("Cortisol"="black","No"="grey")
+col.bin.vital_status <- c("Alive"="grey", "Dead"="black")
+
+col.stage <- c("stage i"= "#bdbdbd", "stage ii"="#969696",
+               "stage iii"="#525252","stage iv"="#000000",
+               "not reported"="#ffffff")
+col.imm_sub <- c("C1"="#ffffff", "C2"="#d9d9d9", "C3"="#969696",
+                 "C4"="#525252", "C5"="#252525", "C6"="#000000")
+col.oth_horm <- c("Mineralcorticoids"="#000000", "Sexual"="#525252", "No"="#bdbdbd")
+
+col.seq_greys.read <- colorRamp2(breaks = seq(21000000, 83000000, length.out=9),
+                                 colors = brewer.pal(9,"Greys"))
+col.seq_greys <- colorRamp2(breaks = seq(0, 4, length.out=9),
+                            colors = brewer.pal(9,"Greys"))
+
+col.ha <- HeatmapAnnotation(steroid = coldata$steroid,
+                            immune_subtype = coldata$immune.subtype,
+                            other.hormones = coldata$other.hormones,
+                            cortisol.excess = coldata$cortisol.excess,
+                            tumor_stage = coldata$tumor_stage,
+                            gender = coldata$gender,
+                            vital_status = coldata$vital_status,
+                            count_TCR_log10 = log10(coldata$TCR + 1),
+                            count_BCR_log10 = log10(coldata$BCR + 1),
+                            count_reads = coldata$reads,
+                            col = list(steroid=col.bin.steroid,
+                                       immune_subtype = col.imm_sub,
+                                       other.hormones = col.oth_horm,
+                                       cortisol.excess = col.bin.cortisol,
+                                       tumor_stage = col.stage,
+                                       gender = col.bin.gender,
+                                       vital_status = col.bin.vital_status,
+                                       count_TCR_log10 = col.seq_greys,
+                                       count_BCR_log10 = col.seq_greys,
+                                       count_reads = col.seq_greys.read))
+
+row.ha <- rowAnnotation(type=c(rep("B",3), rep("T",4)))
+df <- as.data.frame(data)
+df$cell_type <- c(rep("B",3), rep("T",4))
+
+rm(col.bin.cortisol, col.bin.gender, col.bin.steroid, col.bin.vital_status,
+   col.imm_sub, col.oth_horm, col.stage, col.seq_greys, col.seq_greys.read)
+
+g2 <- Heatmap(data,
+              split = df$cell_type,
+              #top_annotation = col.ha,
+              show_column_names = FALSE,
+              cluster_columns = FALSE,
+              cluster_rows = F,
+              col=colorRamp2(breaks = seq(-2,2, length.out=9),
+                             colors = rev(brewer.pal(9,"RdGy"))),
+              row_title_gp = gpar(fontsize=10),
+              row_title_side = "left",
+              row_names_side = "right",
+              row_names_gp = gpar(fontsize=10))
+
+ht_list = g1 %v% g2
+draw(ht_list, merge_legends=TRUE,annotation_legend_side = "top")
+rm(col.ha,coldata,coldataACC,data,tableGeneral,idx,i,j,df,row.ha)
+
+# -- CPK -- ####################################################################
+
+load("data/coldataACC.RData")
+load("data/tableGeneral.RData")
+
+## -- data
+data <- tableGeneral %>%
+  group_by(sample_id, chain) %>%
+  summarize(CPK) %>%
+  pivot_wider(names_from = chain,
+              values_from = CPK,
+              values_fill = NA)
+
+data <- data[,c(1,2,12:17)]
+data <- column_to_rownames(data, "sample_id")
+
+data <- as.matrix(t(data))
+
+data[is.na(data)] <- 0
+
+## -- ordenacao
+coldataACC$sum_TCR_BCR <-coldataACC$TCR + coldataACC$BCR
+coldata <- coldataACC %>%
+  arrange(desc(steroid), desc(sum_TCR_BCR))
+
+nrow(coldata)
+ncol(data)
+
+coldata <- coldata[!is.na(coldata$sample_id),]
+
+rownames(coldata) <- coldata$sample_id
+colnames(data) <- gsub("_report","",colnames(data))
+all(rownames(coldata) %in% colnames(data))
+
+idx <- match(rownames(coldata), colnames(data))
+data <- data[,idx]
+
+all(rownames(coldata) == colnames(data))
+
+nrow(coldata)
+ncol(data)
+
+## -- transformacao z-score
+data <- log2(data + 1)
+
+data <- as.matrix(t(scale(t(data))))
+summary(t(data))
+
+## -- setando extremidades
+data[data > 2] <- 2
+data[data < (-2)] <- (-2)
+
+# -- cores dos metadados
+col.bin.steroid <- c("Steroid_High"="black", "Steroid_Low"="gray")
+col.bin.gender <- c("female"="grey", "male"="black")
+col.bin.cortisol <- c("Cortisol"="black","No"="grey")
+col.bin.vital_status <- c("Alive"="grey", "Dead"="black")
+
+col.stage <- c("stage i"= "#bdbdbd", "stage ii"="#969696",
+               "stage iii"="#525252","stage iv"="#000000",
+               "not reported"="#ffffff")
+col.imm_sub <- c("C1"="#ffffff", "C2"="#d9d9d9", "C3"="#969696",
+                 "C4"="#525252", "C5"="#252525", "C6"="#000000")
+col.oth_horm <- c("Mineralcorticoids"="#000000", "Sexual"="#525252", "No"="#bdbdbd")
+
+col.seq_greys.read <- colorRamp2(breaks = seq(21000000, 83000000, length.out=9),
+                                 colors = brewer.pal(9,"Greys"))
+col.seq_greys <- colorRamp2(breaks = seq(0, 4, length.out=9),
+                            colors = brewer.pal(9,"Greys"))
+
+col.ha <- HeatmapAnnotation(steroid = coldata$steroid,
+                            immune_subtype = coldata$immune.subtype,
+                            other.hormones = coldata$other.hormones,
+                            cortisol.excess = coldata$cortisol.excess,
+                            tumor_stage = coldata$tumor_stage,
+                            gender = coldata$gender,
+                            vital_status = coldata$vital_status,
+                            count_TCR_log10 = log10(coldata$TCR + 1),
+                            count_BCR_log10 = log10(coldata$BCR + 1),
+                            count_reads = coldata$reads,
+                            col = list(steroid=col.bin.steroid,
+                                       immune_subtype = col.imm_sub,
+                                       other.hormones = col.oth_horm,
+                                       cortisol.excess = col.bin.cortisol,
+                                       tumor_stage = col.stage,
+                                       gender = col.bin.gender,
+                                       vital_status = col.bin.vital_status,
+                                       count_TCR_log10 = col.seq_greys,
+                                       count_BCR_log10 = col.seq_greys,
+                                       count_reads = col.seq_greys.read))
+
+row.ha <- rowAnnotation(type=c(rep("B",3), rep("T",4)))
+df <- as.data.frame(data)
+df$cell_type <- c(rep("B",3), rep("T",4))
+
+rm(col.bin.cortisol, col.bin.gender, col.bin.steroid, col.bin.vital_status,
+   col.imm_sub, col.oth_horm, col.stage, col.seq_greys, col.seq_greys.read)
+
+g3 <- Heatmap(data,
+              split = df$cell_type,
+              #top_annotation = col.ha,
+              show_column_names = FALSE,
+              cluster_columns = FALSE,
+              cluster_rows = F,
+              col=colorRamp2(breaks = seq(-2,2, length.out=9),
+                             colors = rev(brewer.pal(9,"RdBu"))),
+              row_title_gp = gpar(fontsize=10),
+              row_title_side = "left",
+              row_names_side = "right",
+              row_names_gp = gpar(fontsize=10))
+
+ht_list = ht_list %v% g3
+draw(ht_list, merge_legends=TRUE,annotation_legend_side = "top")
+rm(col.ha,coldata,coldataACC,data,tableGeneral,idx,df,row.ha)
+
+################################################################################
+
+load("../000_lymphocyteFraction/resEpic.RData")
+
+load("data/coldataACC.RData")
+
+# -- data
+data <- resEpic
+data <- data[,]
+
+nchar(rownames(data))
+head(coldataACC$barcode)
+head(rownames(data))
+
+coldataACC <- coldataACC[!is.na(coldataACC$sample_id),]
+
+idx <- match(substr(coldataACC$barcode,1,16),rownames(data))
+idx <- idx[!is.na(idx)]
+data <- data[idx,]
+
+rownames(data) == substr(coldataACC$barcode,1,16)
+rownames(data) <- coldataACC$sample_id
+
+somatorio_linhas <- rowSums(data)
+#data <- data[,c(1,3,4)]
+
+#fator_escala <- somatorio_linhas/rowSums(data)
+#data <- t(t(data) * fator_escala)
+
+#rowSums(data)
+
+data <- as.matrix(t(data))
+
+## -- ordenacao
+coldataACC$sum_TCR_BCR <-coldataACC$TCR + coldataACC$BCR
+coldata <- coldataACC %>%
+  arrange(desc(steroid), desc(sum_TCR_BCR))
+
+nrow(coldata)
+ncol(data)
+
+rownames(coldata) <- coldata$sample_id
+all(rownames(coldata) %in% colnames(data))
+
+idx <- match(rownames(coldata), colnames(data))
+data <- data[,idx]
+
+all(rownames(coldata) == colnames(data))
+
+nrow(coldata)
+ncol(data)
+
+## -- transformacao z-score
+#data <- log2(data + 1)
+
+data <- as.matrix(t(scale(t(data))))
+summary(t(data))
+
+## -- setando extremidades
+data[data > 2] <- 2
+data[data < (-2)] <- (-2)
+
+# -- cores dos metadados
+col.bin.steroid <- c("Steroid_High"="black", "Steroid_Low"="gray")
+col.bin.gender <- c("female"="grey", "male"="black")
+col.bin.cortisol <- c("Cortisol"="black","No"="grey")
+col.bin.vital_status <- c("Alive"="grey", "Dead"="black")
+
+col.stage <- c("stage i"= "#bdbdbd", "stage ii"="#969696",
+               "stage iii"="#525252","stage iv"="#000000",
+               "not reported"="#ffffff")
+col.imm_sub <- c("C1"="#ffffff", "C2"="#d9d9d9", "C3"="#969696",
+                 "C4"="#525252", "C5"="#252525", "C6"="#000000")
+col.oth_horm <- c("Mineralcorticoids"="#000000", "Sexual"="#525252", "No"="#bdbdbd")
+
+col.seq_greys.read <- colorRamp2(breaks = seq(21000000, 83000000, length.out=9),
+                                 colors = brewer.pal(9,"Greys"))
+col.seq_greys <- colorRamp2(breaks = seq(0, 4, length.out=9),
+                            colors = brewer.pal(9,"Greys"))
+
+col.ha <- HeatmapAnnotation(steroid = coldata$steroid,
+                            immune_subtype = coldata$immune.subtype,
+                            other.hormones = coldata$other.hormones,
+                            cortisol.excess = coldata$cortisol.excess,
+                            tumor_stage = coldata$tumor_stage,
+                            gender = coldata$gender,
+                            vital_status = coldata$vital_status,
+                            count_TCR_log10 = log10(coldata$TCR + 1),
+                            count_BCR_log10 = log10(coldata$BCR + 1),
+                            count_reads = coldata$reads,
+                            col = list(steroid=col.bin.steroid,
+                                       immune_subtype = col.imm_sub,
+                                       other.hormones = col.oth_horm,
+                                       cortisol.excess = col.bin.cortisol,
+                                       tumor_stage = col.stage,
+                                       gender = col.bin.gender,
+                                       vital_status = col.bin.vital_status,
+                                       count_TCR_log10 = col.seq_greys,
+                                       count_BCR_log10 = col.seq_greys,
+                                       count_reads = col.seq_greys.read))
+
+
+rm(col.bin.cortisol, col.bin.gender, col.bin.steroid, col.bin.vital_status,
+   col.imm_sub, col.oth_horm, col.stage, col.seq_greys, col.seq_greys.read)
+
+g4 <- Heatmap(data,
+              #top_annotation = col.ha,
+              show_column_names = FALSE,
+              cluster_columns = FALSE,
+              cluster_rows = F,
+              col=colorRamp2(breaks = seq(-2,2, length.out=9),
+                             colors = rev(brewer.pal(9,"PuOr"))),
+              row_title_gp = gpar(fontsize=10),
+              row_title_side = "left",
+              row_names_side = "right",
+              row_names_gp = gpar(fontsize=10))
+
+ht_list = ht_list %v% g4
+draw(ht_list, merge_legends=TRUE,annotation_legend_side = "top")
+rm(col.ha,coldata,coldataACC,data,tableGeneral,idx,i,j)
+

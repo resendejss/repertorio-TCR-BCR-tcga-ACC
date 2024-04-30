@@ -1,0 +1,190 @@
+---
+title: "Análise exploratória"
+author: "Jean Resende"
+format: pdf
+editor: visual
+---
+
+# Contexto
+
+# Agrupamento das tabelas
+
+Iniciei o agrupamento das sequências setando os diretorios que se encontravam as tabelas e gerando as listas que conterão as tabelas.
+
+```{r}
+#| output: false
+
+library(data.table)
+
+# diretorios contendo os arquivos
+diretorio_tcrbcr_sequencias <- "../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/outputTrust4_report/"
+
+diretorio_tcrbcr_clones <- "../04_anlytics/00_clones/data/"
+
+# listas para armazenar as tabelas
+lista_tcrbcr_sequencias <- list()
+lista_tcrbcr_clones <- list()
+```
+
+Em seguida, aplico um loop importando as tabelas para o ambiente R, gero uma variável com o nome das amostras e junto as tabelas da lista para um única tabela.
+
+```{r}
+#| output: false
+
+# loop para importar as tabelas
+arquivos_sequencias <- list.files(path = diretorio_tcrbcr_sequencias,
+                                  pattern = "\\.tsv$", full.names = TRUE)
+
+for (arquivo in arquivos_sequencias) {
+  tabela <- fread(arquivo, sep = "\t")
+  tabela$sample_id <- gsub("_report.tsv", "", basename(arquivo))
+  lista_tcrbcr_sequencias[[basename(arquivo)]] <- tabela
+}
+
+# combina todas as tabelas em uma unica tabela
+tcrbcr_sequencias <- rbindlist(lista_tcrbcr_sequencias, idcol = "fonte_tabelas")
+```
+
+```{r}
+#| output: false
+
+# loop para importar as tabelas
+arquivos_clones <- list.files(path = diretorio_tcrbcr_clones,
+                                  pattern = "\\.tsv$", full.names = TRUE)
+
+for (arquivo in arquivos_clones) {
+  tabela <- fread(arquivo, sep = "\t")
+  tabela$sample_id <- gsub("_report.tsv", "", basename(arquivo))
+  lista_tcrbcr_clones[[basename(arquivo)]] <- tabela
+}
+
+# combina todas as tabelas em uma unica tabela
+tcrbcr_clones <- rbindlist(lista_tcrbcr_clones, idcol = "fonte_tabelas")
+```
+
+Após ter construído a tabela para as sequencias e para os clones, salvei estes objetos e tabelas e limpei o ambiente de trabalho.
+
+```{r}
+#| output: false
+
+save(tcrbcr_sequencias, file = "tcrbcr_sequencias.RData")
+save(tcrbcr_clones, file = "tcrbcr_clones.RData")
+
+write.csv(tcrbcr_sequencias, file = "tcrbcr_sequencias.csv")
+write.csv(tcrbcr_clones, file = "tcrbcr_clones.csv")
+```
+
+Após salvar os objetos e tabelas, limpo o ambiente de trabalho, para então iniciar a análise exploratória dos dados.
+
+```{r}
+#| output: false
+
+objetos <- ls()
+
+for (objeto  in objetos) {
+  if(objeto %in% c("tcrbcr_clones", "tcrbcr_sequencias") == FALSE){
+    rm(list = objeto)
+  }
+}
+```
+
+# Exploração dos dados
+
+Começo importando para o R os metadados para auxiliar na exploração dos dados de TCR e BCR.
+
+```{r}
+#| output: false
+
+load("../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/metadata.RData")
+
+load("../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/coldataACC.RData")
+
+#load("tcgaACC_pre_processed.RData")
+```
+
+```{r}
+#| output: false
+
+library(TCGAbiolinks)
+
+ACC_clinical <- GDCquery_clinic("TCGA-ACC")
+
+```
+
+```{r}
+idx_barcode <- ACC_clinical$submitter_id %in% 
+                            substr(metadata$barcode, 1,12)
+# generos
+table(ACC_clinical$gender[idx_barcode])
+
+# idade media
+mean(ACC_clinical$age_at_index[idx_barcode])
+range(ACC_clinical$age_at_index[idx_barcode])
+
+# steroid
+table(metadata$steroid)
+```
+
+```{r}
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,2) == "IG"])
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,2) == "TR"])
+
+sum(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,2) == "IG"])
+sum(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,2) == "TR"])
+```
+
+```{r}
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "IGH"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "IGH"])
+
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "IGK"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "IGK"])
+
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "IGL"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "IGL"])
+
+
+sum(tcrbcr_clones$count[substr(tcrbcr_clones$V, 1,3) == "IGH"])
+range(tcrbcr_clones$count[substr(tcrbcr_clones$V, 1,3) == "IGH"])
+
+sum(tcrbcr_clones$count[substr(tcrbcr_clones$V, 1,3) == "IGK"])
+range(tcrbcr_clones$count[substr(tcrbcr_clones$V, 1,3) == "IGK"])
+
+sum(tcrbcr_clones$count[substr(tcrbcr_clones$V, 1,3) == "IGL"])
+range(tcrbcr_clones$count[substr(tcrbcr_clones$V, 1,3) == "IGL"])
+
+
+
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRA"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRA"])
+
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRB"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRB"])
+
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRD"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRD"])
+
+sum(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRG"])
+range(tcrbcr_sequencias$`#count`[substr(tcrbcr_sequencias$V, 1,3) == "TRG"])
+
+
+sum(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRA"])
+range(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRA"])
+
+sum(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRB"])
+range(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRB"])
+
+sum(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRD"])
+range(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRD"])
+
+sum(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRG"])
+range(tcrbcr_clones$`count`[substr(tcrbcr_clones$V, 1,3) == "TRG"])
+```
+
+```{r}
+data <- tcrbcr_sequencias
+data$type <- ifelse(substr(data$V, 1,2) == "IG", "BCR",
+                    ifelse(substr(data$V, 1,2) == "TR","TCR",NA))
+
+head(data)
+```

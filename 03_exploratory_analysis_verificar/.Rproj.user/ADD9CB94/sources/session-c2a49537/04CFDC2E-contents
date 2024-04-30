@@ -1,0 +1,147 @@
+---
+title: "Agrupamento de clonótipos para TCR e BCR"
+format: pdf
+editor: visual
+---
+
+# Contexto
+
+A etapa de agrupamento de sequências de BCRs e TCRs é comum na análise de repertório desses receptores. Em células B, esta etapa é necessária afim de produzir linhagens clonais. Permitindo o avanço no entendimento dos níveis de hipermutação somática que alteram a afinidade de ligação.
+
+Quanto aos TCR, já foi demonstrado que células T capazes de reconhecer epítopos idênticos têm TCR altemente semelhante. Assim, o agrupamento de TCR semelhantes, permite encontrar repertórios semelhantes que provavelmente reconhecem os mesmos antígenos.
+
+O agrupamento envolve duas etapas:
+
+1.  cálculo da distância entre as sequências
+2.  agrupar as sequências usando as informações das distâncias
+
+Um clonótipo é um conjunto de células que supostamente compartilham um ancestral comum ou propriedades comuns. Em repertórios de TCR e BCR, existem algumas maneiras em definir clonótipos.
+
+# Cálculo da distância e clusterização
+
+```{r}
+#| output: false
+
+# -- pacotes necessarios
+library(immunarch)
+library(dplyr)
+```
+
+```{r}
+#| output: false
+
+# -- preparando o ambiente de trabalho
+dir_data <- 
+  "../../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/"
+
+immdata <- repLoad(paste(dir_data, "outputTrust4_report", sep = ""))
+load(paste(dir_data, "metadata.RData", sep = ""))
+
+immdata$meta <- metadata[metadata$sample_id %in% 
+                           gsub("_report", "", immdata$meta$Sample),]
+remove_NA <- function(df){
+  df %>%
+    filter(!is.na(J.name))
+}
+
+
+immdata$data <- lapply(immdata$data, remove_NA)
+
+immdata$data$`130723_UNC9-SN296_0386_BC2E4WACXX_ACTTGA_L003_report`
+```
+
+Separei os repertórios de TCR e BCR, pois a definição de clonótipos para estes receptores é diferente.
+
+```{r}
+#| output: false
+
+# -- separacao dos repertorios de TCR e BCR
+immdata$meta$Sample <- paste(immdata$meta$sample_id,"_report",sep = "")
+
+immdata$meta$Sample %in% names(immdata$data)
+
+immdata_bcr <- repFilter(immdata,
+                         .method = "by.clonotype",
+                         .query = list(V.name = include("IG")),
+                         .match = "substring")
+
+immdata_tcr <- repFilter(immdata,
+                         .method = "by.clonotype",
+                         .query = list(V.name = include("TR")),
+                         .match = "substring")
+```
+
+Para os clonótipos de BCR estou considerando sequências com o mesmo tamanho da região CDR3 (em pb), mesmo gene V e J e 90% de similaridade entre as sequências de nucleotídeos para a região CDR3. Paro os clonótipos de TCR consirei o mesmo tamanho da região CDR3 (em pb), mesmo gene V e J e 95% de similaridade entre as sequências de nucleotídeos para a região CDR3.
+
+```{r}
+#| output: false
+
+# -- calculo da distancia entre as sequencias
+dist_BCR <- seqDist(immdata_bcr$data, 
+                   .group_by = c("V.name", "J.name"),
+                   .group_by_seqLength = TRUE,
+                   .col = "CDR3.nt")
+
+clust_BCR <- seqCluster(immdata_bcr$data, dist_BCR, .perc_similarity = 0.9)
+
+
+dist_TCR <- seqDist(immdata_tcr$data[-12], 
+                    .group_by = c("V.name", "J.name"),
+                    .group_by_seqLength = TRUE,
+                    .col = "CDR3.nt")
+
+clust_TCR <- seqCluster(immdata_tcr$data[-12], dist_TCR, .perc_similarity = 0.95)
+```
+
+Precisei remover a amostra "12" porque o cálculo da distância e geração dos clauster geravam um erro (fiz a clusterização dessa amostra na "mão").
+
+```{r}
+temp <- immdata_tcr$data[12]
+
+temp$`130723_UNC9-SN296_0386_BC2E4WACXX_TAGCTT_L006_report`$J.name
+nchar(temp$`130723_UNC9-SN296_0386_BC2E4WACXX_TAGCTT_L006_report`$CDR3.nt)
+
+temp$`130723_UNC9-SN296_0386_BC2E4WACXX_TAGCTT_L006_report`$Cluster <- 
+  c("TRAV9-2/TRAJ17_length_39","TRAV9-2/TRAJ17_length_39")
+
+names(temp)
+
+clust_TCR$`130723_UNC9-SN296_0386_BC2E4WACXX_TAGCTT_L006_report` <- 
+  as.data.frame(temp$`130723_UNC9-SN296_0386_BC2E4WACXX_TAGCTT_L006_report`) 
+
+
+clust_TCR$`130723_UNC9-SN296_0386_BC2E4WACXX_TAGCTT_L006_report`
+
+clust_TCR$`130723_UNC9-SN296_0386_BC2E4WACXX_ACTTGA_L003_report`
+```
+
+Após gerar os cluster para as sequências de TCR e BCR, precisei agrupá-las com base nos clusteres, ou seja, as sequências que foram condizentes com os critérios de clonótipos foram agrupadas e assim, tratadas como clonótipos.
+
+```{r}
+# funcao para agrupar os dataframes
+agrupar_por_cluster <- function(df){
+  df %>%
+    group_by(Cluster) %>%
+    mutate(Clones = sum(Clones),
+           Proportion = sum(Proportion)) %>%
+    ungroup() %>%
+    distinct(Cluster, .keep_all = TRUE) %>%
+    as.data.frame()
+}
+
+# aplicando a funcao na lista de dataframes
+clust_TCR_agrupados <- lapply(clust_TCR, agrupar_por_cluster)
+clust_BCR_agrupados <- lapply(clust_BCR, agrupar_por_cluster)
+```
+
+```{r}
+# exportar tabelas de TCR
+for (i in names(clust_TCR_agrupados)) {
+  write.csv(clust_TCR_agrupados[i],
+            file = paste("data/tcr/", i, "_clones.csv", sep = ""))}
+
+# exportar tabelas de BCR
+for (i in names(clust_BCR_agrupados)) {
+  write.csv(clust_BCR_agrupados[i],
+            file = paste("data/bcr/", i, "_clones.csv", sep = ""))}
+```

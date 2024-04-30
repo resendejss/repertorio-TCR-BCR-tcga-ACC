@@ -1,0 +1,53 @@
+---
+title: "Análise exploratória"
+author: "Jean Resende"
+format: pdf
+editor: visual
+---
+
+## Contexto
+
+Este relatório refere-se a exploração da extração de TCR e BCR da coorte TCGA-ACC. O Objetivo é visualizar a quantidade de sequências, quanmtidade de receptores por gêneros e perfil esteroidal. Estou considerando tanto as sequências brutas de TCR e BCR, quanto as sequências de clonótipos (geradas na análise de clones).
+
+```{r}
+#| output: false
+# -- arquivos necessarios
+load("tcgaACC_pre_processed.RData")
+```
+
+```{r}
+#| output: false
+
+# -- tabelas originais
+outputTrust4_report <- 
+  "../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/outputTrust4_report/"
+
+files <- list.files(outputTrust4_report)
+
+writeLines(files, "samplesNames.txt") # gerando samplesNames.txt
+file.exists("samplesNames.txt")
+
+# -- tabelas de clones
+outputTrust4_report_clones <- "../04_anlytics/00_clones/data/"
+
+files_clones <- list.files(outputTrust4_report_clones)
+writeLines(files_clones, "samplesNames_clones.txt")
+```
+
+```{bash}
+#| output: false
+while read SAMP
+    do
+    echo "processing ${SAMP}"
+    python3 trust-stats.py -r ../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/outputTrust4_report/${SAMP} > stats_TRUST4/${SAMP}
+    done < samplesNames.txt
+```
+
+```{bash}
+#| output: false
+while read SAMP
+    do
+    echo "processing ${SAMP}"
+    python3 trust-stats.py -r ../04_anlytics/00_clones/data/${SAMP} > stats_TRUST4_clones/${SAMP}
+    done < samplesNames_clones.txt
+```

@@ -1,0 +1,32 @@
+---
+title: "Análise exploratória"
+author: "Jean Resende"
+format: pdf
+editor: visual
+---
+
+## Contexto
+
+Este relatório refere-se a exploração da extração de TCR e BCR da coorte TCGA-ACC. O Objetivo é visualizar a quantidade de sequências, quanmtidade de receptores por gêneros e perfil esteroidal. Estou considerando tanto as sequências brutas de TCR e BCR, quanto as sequências de clonótipos (geradas na análise de clones).
+
+```{r}
+# -- arquivos necessarios
+load("tcgaACC_pre_processed.RData")
+```
+
+```{r}
+outputTrust4_report <- 
+  "../../../Projetos/Bigdata/BigData/BigData/repertorio_tcrbcr_acc/data/outputTrust4_report/"
+
+files <- list.files(outputTrust4_report)
+
+writeLines(files, "samplesNames.txt") # gerando samplesNames.txt
+file.exists("samplesNames.txt")
+```
+
+```{bash}
+while read SAMP
+  do
+  echo "processing ${SAMP}"
+  python3 trust-stats.py -r 
+```

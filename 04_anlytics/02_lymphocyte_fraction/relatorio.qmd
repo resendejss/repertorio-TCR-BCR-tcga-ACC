@@ -1,0 +1,109 @@
+---
+title: "Fração de Linfócitos"
+author: "Jean Resende"
+format: pdf
+editor: visual
+---
+
+# Contexto
+
+# Fração de linfócitos
+
+```{r}
+# pacotes  necessarios
+library(UCSCXenaTools)
+library(IOBR)
+```
+
+```{r}
+## -- download da matriz de expressao genica atraves do xenabrowser
+eset_acc<-XenaGenerate(subset = XenaCohorts =="GDC TCGA Adrenocortical Cancer (ACC)") %>% 
+  XenaFilter(filterDatasets    = "TCGA-ACC.htseq_counts.tsv") %>% 
+  XenaQuery() %>%
+  XenaDownload() %>% 
+  XenaPrepare()
+```
+
+```{r}
+## -- anotacao e normalizacao em TPM
+eset_acc$Ensembl_ID <- gsub("\\..*","",eset_acc$Ensembl_ID) # remocao da versao
+eset_acc <- column_to_rownames(eset_acc, var = "Ensembl_ID")
+eset_acc <- (2^eset_acc)+1 # revertendo para a contagem original (pois estao em log2)
+eset_acc <- count2tpm(countMat = eset_acc, idType = "Ensembl") # normalizacao em TPM
+```
+
+```{r}
+epic <- deconvo_tme(eset = log2(eset_acc+1),
+                    method = "epic", arrays = FALSE)
+
+head(epic)
+```
+
+```{r}
+xcell <- deconvo_tme(eset = log2(eset_acc+1),
+                     method = "xcell", arrays = FALSE)
+
+head(xcell)
+```
+
+```{r}
+mcp <- deconvo_tme(eset = log2(eset_acc+1),
+                   method = "mcpcounter", arrays = FALSE)
+
+head(mcp)
+```
+
+```{r}
+estimate <- deconvo_tme(eset = log2(eset_acc+1),
+                        method = "estimate", arrays = FALSE)
+
+head(estimate)
+```
+
+```{r}
+timer <- deconvo_tme(eset = log2(eset_acc+1), 
+                     method = "timer",
+                     group_list = rep("acc",ncol(eset_acc)),
+                     arrays = FALSE)
+
+head(timer)
+```
+
+```{r}
+ips <- deconvo_tme(eset = log2(eset_acc+1),
+                   method = "ips",
+                   plot = FALSE)
+
+head(ips)
+```
+
+```{r}
+cibersort <- deconvo_tme(eset = log2(eset_acc+1),
+                         method = "cibersort",
+                         arrays = FALSE,
+                         perm = 200)
+head(cibersort)
+```
+
+```{r}
+quantiseq <- deconvo_tme(eset = log2(eset_acc+1),
+                         tumor = TRUE,
+                         arrays = FALSE,
+                         scale_mrna = TRUE,
+                         method = "quantiseq")
+
+head(quantiseq)
+```
+
+```{r}
+save(epic, file = "epic.RData")
+save(xcell, file = "xcell.RData")
+save(mcp, file = "mcp.RData")
+save(estimate, file = "estimate.RData")
+save(timer, file = "timer.RData")
+save(ips, file = "ips.RData")
+save(cibersort, file = "cibersort.RData")
+save(quantiseq, file = "quantiseq.RData")
+
+save(eset_acc, file = "eset_acc_xenabrowser.RData")
+```

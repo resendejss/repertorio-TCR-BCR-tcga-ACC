@@ -1,0 +1,153 @@
+
+library(immunarch)
+
+immdata <- repLoad("../data/outputTrust4_report/")
+load("data/coldataACC.RData")
+
+coldataACC$Sample <- paste(coldataACC$sample_id, "_report", sep = "")
+coldataACC <- coldataACC[!is.na(coldataACC$sample_id),] 
+coldataACC$sample_id
+
+immdata[[2]] <- coldataACC
+
+# estatistica basica
+exp_vol <- repExplore(immdata$data, .method = "volume")
+exp_len <- repExplore(immdata$data, .method = "len", .col = "aa")
+exp_cnt <- repExplore(immdata$data, .method = "count")
+
+vis(exp_vol, .by = c("steroid"), .meta = immdata$meta)
+#vis(exp_vol, .by = c("gender"), .meta = immdata$meta)
+#vis(exp_vol, .by = c("tumor_stage"), .meta = immdata$meta)
+#vis(exp_vol, .by = c("immune.subtype"), .meta = immdata$meta)
+#vis(exp_vol, .by = c("cortisol.excess"), .meta = immdata$meta)
+
+p1 <- vis(exp_vol, .by = c("steroid"), .meta = immdata$meta)
+p2 <- vis(exp_len, .by = c("steroid"), .meta = immdata$meta, .points = F)
+p3 <- vis(exp_cnt, .by = c("steroid"), .meta = immdata$meta)
+
+# sobreposicao de repertorios
+ov.aav.cod <- pubRep(immdata$data, "aa+v", .coding = T, .verbose = F)
+ov.aav.cod.low <- pubRepFilter(ov.aav.cod, immdata$meta, c(steroid="Steroid_Low"))
+ov.aav.cod.high <- pubRepFilter(ov.aav.cod, immdata$meta, c(steroid="Steroid_High"))
+
+write.csv(ov.aav.cod.low, file = "tables/ov_aav_cod_low.csv")
+write.csv(ov.aav.cod.high, file = "tables/ov_avv_cod_high.csv")
+
+
+data.low <- ov.aav.cod.low
+data.low[is.na(data.low)] <- 0
+rowSums(data.low[,4:31])
+
+data.low <- data.frame(CDR3.aa = data.low$CDR3.aa,
+                       V.name = data.low$V.name,
+                       sum = rowSums(data.low[,4:31]))
+
+ggplot(data.low[data.low$sum > 1000,], aes(x = CDR3.aa, y = sum)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Genes", y = "Quantidade") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# CDR3
+ov.aa.cod <- pubRep(immdata$data, "aa", .coding = T, .verbose = F)
+ov.aa.cod.low <- pubRepFilter(ov.aa.cod, immdata$meta, c(steroid="Steroid_Low"))
+ov.aa.cod.high <- pubRepFilter(ov.aa.cod, immdata$meta, c(steroid="Steroid_High"))
+
+data.low <- ov.aa.cod.low
+data.low[is.na(data.low)] <- 0
+data.low$sum <- rowSums(data.low[,3:30])
+
+cln.low <- data.low$CDR3.aa[data.low$Samples > 2]
+idx <- match(cln.low, ov.aa.cod.low$CDR3.aa)
+ov.aa.cod.low$Samples[idx]
+
+#data.low <- data.frame(CDR3.aa = data.low$CDR3.aa,
+#                       sum = data.low$sum)
+
+ggplot(data.low[data.low$Samples>2,], aes(x = CDR3.aa, y = log2(sum))) +
+  geom_bar(stat = "identity") +
+  labs(x = "Genes", y = "Quantidade") +
+  scale_y_continuous(limits = c(0, 14), breaks = seq(0, 14, by = 4))+
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 0))
+
+
+data.high <- ov.aa.cod.high
+data.high[is.na(data.high)] <- 0
+data.high$sum <- rowSums(data.high[,3:41])
+
+cln.high <- data.high$CDR3.aa[data.high$Samples > 2]
+idx <- match(cln.high, ov.aa.cod.high$CDR3.aa)
+ov.aa.cod.high$Samples[idx]
+
+
+#data.high <- data.frame(CDR3.aa = data.high$CDR3.aa,
+#                        sum = data.high$sum)
+
+ggplot(data.high[data.high$Samples>2,], aes(x = CDR3.aa, y = log2(sum))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Genes", y = "Quantidade") +
+  scale_y_continuous(limits = c(0, 14), breaks = seq(0, 14, by = 4))+
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+
+
+# Carregando a biblioteca ggplot2
+library(ggplot2)
+
+# Exemplo de dados (substitua isso pelos seus próprios dados)
+dados <- data.frame(
+  Genes = c("Gene1", "Gene2", "Gene3"),
+  Amostra1 = c(10, 20, 5),
+  Amostra2 = c(15, 25, 8)
+)
+
+
+data <- ov.aav.cod.high
+
+# Transformando os dados em um formato longo para uso com ggplot2
+library(tidyr)
+data_l <- pivot_longer(data, cols = starts_with("13"), names_to = "sample_id", values_to = "Quantidade")
+
+# Criando o gráfico de barras
+ggplot(data_l, aes(x = V.name, y = Quantidade)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Genes", y = "Quantidade") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+
+# sobreposicao de repertorios
+ov <- repOverlap(immdata$data)
+vis(ov, "circos", annotationTrack="grid")
+vis_heatmap2(ov, show_rownames=F, show_colnames=F)
+
+imm_ov1 <- repOverlap(immdata$data, .method = "public", .verbose = F)
+vis_heatmap2(imm_ov1, show_rownames=F, show_colnames=F)
+vis(imm_ov1)
+
+imm_ov2 <- repOverlap(immdata$data, .method = "jaccard", .verbose = F)
+vis_heatmap2(imm_ov2, show_rownames=F, show_colnames=F)
+
+imm_ov3 <- repOverlap(immdata$data, .method = "morisita", .verbose = F)
+vis_heatmap2(imm_ov3, show_rownames=F, show_colnames=F)
+
+pr.aav <- pubRep(immdata$data, "aa+v", .verbose = F)
+write.csv(pr.aav, file="pr.avv.csv")
+
+
+clon_homeo <- repClonality(immdata$data, "clonal.prop")
+imm_rare <- repClonality(immdata$data, .method = "rare")
+vis(imm_rare)
+vis(imm_rare, .by = "steroid", .meta = immdata$meta)
+
+imm_top <- repClonality(immdata$data, .method = "top", .head = c(10, 100, 1000, 3000))
+vis(imm_top, .by = "steroid", .meta = immdata$meta)
+
+imm_hom <- repClonality(immdata$data, .method = "homeo")
+vis(imm_hom)
+vis(imm_hom, .by = "steroid", .meta = immdata$meta)

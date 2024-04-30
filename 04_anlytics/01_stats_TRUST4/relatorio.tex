@@ -1,0 +1,701 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Estatísticas Pós-Extração: Recomendação do TRUST4},
+  pdfauthor={Jean Resende},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Estatísticas Pós-Extração: Recomendação do TRUST4}
+\author{Jean Resende}
+\date{}
+
+\begin{document}
+\maketitle
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, breakable, sharp corners, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden]}{\end{tcolorbox}}\fi
+
+\hypertarget{contexto}{%
+\section{Contexto}\label{contexto}}
+
+Após a extração dos receptores TCR e BCR, os desenvolvedores do TRUST4
+recomendam a da função contida em \textbf{trust-stats.py}. No entanto,
+essa função é focada nos dados output do TRUST4, como foco mais
+específico no arquivo \emph{report}. O que pretendo fazer aqui, é
+converter os cálculos aplicados nesta função em \textbf{python} para
+\textbf{R} e mostrar como aplicar nos dados brutos extraídos com TRUST4
+e também aos dados de clonótipos calculados e agrupados com o
+\textbf{immunarch}.
+
+\hypertarget{executando-trust-stats.py-nos-dados-report-obtidos-com-trust4}{%
+\section{Executando trust-stats.py nos dados report obtidos com
+TRUST4}\label{executando-trust-stats.py-nos-dados-report-obtidos-com-trust4}}
+
+Primeiro gerei um txt contendo so nomes dos arquivos para rodar a função
+nestes dados.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-} tabelas originais}
+\NormalTok{outputTrust4\_report }\OtherTok{\textless{}{-}} 
+  \StringTok{"../../../../Projetos/Bigdata/BigData/BigData/repertorio\_tcrbcr\_acc/data/outputTrust4\_report/"}
+
+\NormalTok{files }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(outputTrust4\_report)}
+
+\FunctionTok{writeLines}\NormalTok{(files, }\StringTok{"samplesNames.txt"}\NormalTok{) }\CommentTok{\# gerando samplesNames.txt}
+\FunctionTok{file.exists}\NormalTok{(}\StringTok{"samplesNames.txt"}\NormalTok{)}
+
+
+\CommentTok{\# {-}{-} tabelas clones}
+\NormalTok{files\_clones }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\StringTok{"../00\_clones/data/"}\NormalTok{)}
+
+\FunctionTok{writeLines}\NormalTok{(files\_clones, }\StringTok{"samplesNames\_clones.txt"}\NormalTok{) }\CommentTok{\# gerando samplesNames.txt}
+\FunctionTok{file.exists}\NormalTok{(}\StringTok{"samplesNames\_clones.txt"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Aqui executo a função para os dados obtidos com o TRUST4.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{while} \BuiltInTok{read} \VariableTok{SAMP}
+    \ControlFlowTok{do}
+    \BuiltInTok{echo} \StringTok{"processing }\VariableTok{$\{SAMP\}}\StringTok{"}
+    \ExtensionTok{python3}\NormalTok{ trust{-}stats.py }\AttributeTok{{-}r}\NormalTok{ ../../../../Projetos/Bigdata/BigData/BigData/repertorio\_tcrbcr\_acc/data/outputTrust4\_report/}\VariableTok{$\{SAMP\}} \OperatorTok{\textgreater{}}\NormalTok{ results\_trust{-}stats/}\VariableTok{$\{SAMP\}}
+    \ControlFlowTok{done} \OperatorTok{\textless{}}\NormalTok{ samplesNames.txt}
+\end{Highlighting}
+\end{Shaded}
+
+Para os arquivos gerados com o TRUST4, a função funciona perfeitamente.
+No entanto, para os dados que gerei com os clonótipos, a função retorna
+NA para todos os valores.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{while} \BuiltInTok{read} \VariableTok{SAMP}
+    \ControlFlowTok{do}
+    \BuiltInTok{echo} \StringTok{"processing }\VariableTok{$\{SAMP\}}\StringTok{"}
+    \ExtensionTok{python3}\NormalTok{ trust{-}stats.py }\AttributeTok{{-}r}\NormalTok{ ../00\_clones/data\_clones/}\VariableTok{$\{SAMP\}} \OperatorTok{\textgreater{}}\NormalTok{ results\_trust{-}stats\_clones/}\VariableTok{$\{SAMP\}}
+    \ControlFlowTok{done} \OperatorTok{\textless{}}\NormalTok{ samplesNames\_clones.txt}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{converter-funuxe7uxf5es-para-o-r}{%
+\section{Converter funções para o
+R}\label{converter-funuxe7uxf5es-para-o-r}}
+
+\hypertarget{input-das-tabelas-de-report-e-clones}{%
+\subsection{Input das tabelas de report e
+clones}\label{input-das-tabelas-de-report-e-clones}}
+
+Visto que o script trust-stats,py retorna apenas NA para os arquivos
+referentes aos clones, vou montar as funções em R e assim executar essas
+funções nos dados report gerados pelo TRUST4 e aos dados gerados na
+etapa de clones.
+
+Começo importando para o ambiente as tabelas referentes aos dados
+gerados pelo TRUST4 e as tabelas de clones.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-} importar tabelas para o R}
+
+\DocumentationTok{\#\# {-}{-} sequencias brutas}
+\NormalTok{dir\_sequencias }\OtherTok{\textless{}{-}} \StringTok{"../../../../Projetos/Bigdata/BigData/BigData/repertorio\_tcrbcr\_acc/data/outputTrust4\_report"}
+
+\NormalTok{arquivos\_sequencias }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(dir\_sequencias)}
+
+\NormalTok{tcrbcr\_sequencias }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
+
+\CommentTok{\# loop para ler cada arquivo e armazenar os dados na lista}
+\ControlFlowTok{for}\NormalTok{ (arquivo }\ControlFlowTok{in}\NormalTok{ arquivos\_sequencias) \{}
+\NormalTok{  nome }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.tsv$"}\NormalTok{, }\StringTok{""}\NormalTok{, arquivo)}
+\NormalTok{  dados }\OtherTok{\textless{}{-}} \FunctionTok{read.delim}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(dir\_sequencias , arquivo), }\AttributeTok{sep =} \StringTok{"}\SpecialCharTok{\textbackslash{}t}\StringTok{"}\NormalTok{)}
+\NormalTok{  tcrbcr\_sequencias[[nome]] }\OtherTok{\textless{}{-}}\NormalTok{ dados}
+\NormalTok{\}}
+
+\DocumentationTok{\#\# {-}{-} clones}
+\NormalTok{dir\_clones }\OtherTok{\textless{}{-}} \StringTok{"../00\_clones/data\_clones"}
+
+\NormalTok{arquivos\_clones }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(dir\_clones)}
+
+\NormalTok{tcrbcr\_clones }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
+
+\CommentTok{\# loop para ler cada arquivo e armazenar os dados na lista}
+\ControlFlowTok{for}\NormalTok{ (arquivo }\ControlFlowTok{in}\NormalTok{ arquivos\_clones) \{}
+\NormalTok{  nome }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.tsv$"}\NormalTok{,}\StringTok{""}\NormalTok{, arquivo)}
+\NormalTok{  dados }\OtherTok{\textless{}{-}} \FunctionTok{read.delim}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(dir\_clones, arquivo), }\AttributeTok{sep =} \StringTok{"}\SpecialCharTok{\textbackslash{}t}\StringTok{"}\NormalTok{)}
+\NormalTok{  tcrbcr\_clones[[nome]] }\OtherTok{\textless{}{-}}\NormalTok{ dados}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Aqui estou removendo os objetos do ambiente R exceto as listas contendo
+as tabelas que irei aplicar as funções.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obj\_a\_manter }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"tcrbcr\_sequencias"}\NormalTok{, }\StringTok{"tcrbcr\_clones"}\NormalTok{)}
+\NormalTok{obj\_no\_ambiente }\OtherTok{\textless{}{-}} \FunctionTok{ls}\NormalTok{()}
+\NormalTok{obj\_a\_remover }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(obj\_no\_ambiente, obj\_a\_manter)}
+\FunctionTok{rm}\NormalTok{(}\AttributeTok{list =}\NormalTok{ obj\_a\_remover)}
+\FunctionTok{rm}\NormalTok{(obj\_a\_remover, obj\_no\_ambiente)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{montagem-das-funuxe7uxf5es}{%
+\subsection{Montagem das funções}\label{montagem-das-funuxe7uxf5es}}
+
+Montei a as funções em R para o cálculo da abundância, riqueza, cpk,
+entropia e clonalidade.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# abundance}
+\NormalTok{calc.abundance }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(count)\{}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{sum}\NormalTok{(count))}
+\NormalTok{\}}
+
+\CommentTok{\# richness}
+\NormalTok{calc.richness }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(count)\{}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{length}\NormalTok{(count))}
+\NormalTok{\}}
+
+\CommentTok{\# cpk}
+\NormalTok{calc.cpk }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(count)\{}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{length}\NormalTok{(count) }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(count) }\SpecialCharTok{*} \DecValTok{1000}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# entropy}
+\NormalTok{calc.entropy }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(count)\{}
+\NormalTok{  j }\OtherTok{\textless{}{-}} \DecValTok{0}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(count)) \{}
+\NormalTok{    t }\OtherTok{\textless{}{-}}\NormalTok{ (}\SpecialCharTok{{-}}\NormalTok{count[i])}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(count) }\SpecialCharTok{*} \FunctionTok{log}\NormalTok{(count[i]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(count))}
+\NormalTok{    j }\OtherTok{\textless{}{-}}\NormalTok{ j }\SpecialCharTok{+}\NormalTok{ t}
+\NormalTok{  \}}
+  \FunctionTok{return}\NormalTok{(j)}
+\NormalTok{\}}
+
+\CommentTok{\# clonality}
+\NormalTok{calc.clonality }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(count)\{}
+  \FunctionTok{return}\NormalTok{(}\DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{calc.entropy}\NormalTok{(count) }\SpecialCharTok{/} \FunctionTok{log}\NormalTok{(}\FunctionTok{length}\NormalTok{(count)))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{execuuxe7uxe3o-das-funuxe7uxf5es}{%
+\subsection{Execução das
+funções}\label{execuuxe7uxe3o-das-funuxe7uxf5es}}
+
+Apliquei as funções nas tabelas contendo as sequências diretas do TRUST4
+e nos clones.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calc\_tcrbcr\_sequencias }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
+
+\ControlFlowTok{for}\NormalTok{ (nome }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(tcrbcr\_sequencias)) \{}
+  
+\NormalTok{  calc\_tcrbcr\_sequencias[[nome]] }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{chain =} \FunctionTok{c}\NormalTok{(}\StringTok{"IGH"}\NormalTok{,}\StringTok{"IGK"}\NormalTok{,}\StringTok{"IGL"}\NormalTok{,}\StringTok{"TRA"}\NormalTok{,}\StringTok{"TRB"}\NormalTok{,}\StringTok{"TRG"}\NormalTok{,}\StringTok{"TRD"}\NormalTok{),}
+    \AttributeTok{Abundance =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{Richness =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{CPK =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{Entropy =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{Clonality =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\}  }
+
+\ControlFlowTok{for}\NormalTok{ (nome }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(tcrbcr\_sequencias)) \{}
+\NormalTok{  df }\OtherTok{\textless{}{-}}\NormalTok{ tcrbcr\_sequencias[[nome]]}
+\NormalTok{  df2 }\OtherTok{\textless{}{-}}\NormalTok{ calc\_tcrbcr\_sequencias[[nome]]}
+  
+  \CommentTok{\# abundance}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  
+  \CommentTok{\# richness}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  \CommentTok{\# cpk}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  \CommentTok{\# entropy}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  \CommentTok{\# clonality}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{X.count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  
+\NormalTok{  calc\_tcrbcr\_sequencias[[nome]] }\OtherTok{\textless{}{-}}\NormalTok{ df2}
+\NormalTok{\}}
+
+\NormalTok{calc\_tcrbcr\_sequencias}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{130723\_UNC9{-}SN296\_0386\_BC2E4WACXX\_ACTTGA\_L003\_report}\StringTok{\textasciigrave{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  chain Abundance Richness      CPK   Entropy  Clonality
+1   IGH         0        0      NaN 0.0000000 1.00000000
+2   IGK        16        9 562.5000 2.1006789 0.04393982
+3   IGL         9        3 333.3333 0.6837389 0.37763403
+4   TRA         0        0      NaN 0.0000000 1.00000000
+5   TRB         5        3 600.0000 0.9502705 0.13502648
+6   TRG         0        0      NaN 0.0000000 1.00000000
+7   TRD         0        0      NaN 0.0000000 1.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calc\_tcrbcr\_clones }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
+
+\ControlFlowTok{for}\NormalTok{ (nome }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(tcrbcr\_clones)) \{}
+  
+\NormalTok{  calc\_tcrbcr\_clones[[nome]] }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{chain =} \FunctionTok{c}\NormalTok{(}\StringTok{"IGH"}\NormalTok{,}\StringTok{"IGK"}\NormalTok{,}\StringTok{"IGL"}\NormalTok{,}\StringTok{"TRA"}\NormalTok{,}\StringTok{"TRB"}\NormalTok{,}\StringTok{"TRG"}\NormalTok{,}\StringTok{"TRD"}\NormalTok{),}
+    \AttributeTok{Abundance =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{Richness =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{CPK =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{Entropy =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+    \AttributeTok{Clonality =} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\}  }
+
+\ControlFlowTok{for}\NormalTok{ (nome }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(tcrbcr\_clones)) \{}
+\NormalTok{  df }\OtherTok{\textless{}{-}}\NormalTok{ tcrbcr\_clones[[nome]]}
+\NormalTok{  df2 }\OtherTok{\textless{}{-}}\NormalTok{ calc\_tcrbcr\_clones[[nome]]}
+  
+  \CommentTok{\# abundance}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Abundance"}\NormalTok{] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{calc.abundance}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  
+  \CommentTok{\# richness}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Richness"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.richness}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  \CommentTok{\# cpk}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"CPK"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.cpk}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  \CommentTok{\# entropy}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Entropy"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.entropy}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  \CommentTok{\# clonality}
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGH"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGK"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"IGL"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRA"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRB"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRG"}\NormalTok{])}
+  
+\NormalTok{  df2[df2}\SpecialCharTok{$}\NormalTok{chain }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{, }\StringTok{"Clonality"}\NormalTok{] }\OtherTok{\textless{}{-}}
+    \FunctionTok{calc.clonality}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{count[}\FunctionTok{substr}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{V, }\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{) }\SpecialCharTok{==} \StringTok{"TRD"}\NormalTok{])}
+  
+  
+\NormalTok{  calc\_tcrbcr\_clones[[nome]] }\OtherTok{\textless{}{-}}\NormalTok{ df2}
+\NormalTok{\}}
+
+\NormalTok{calc\_tcrbcr\_clones}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{130723\_UNC9{-}SN296\_0386\_BC2E4WACXX\_ACTTGA\_L003\_report}\StringTok{\textasciigrave{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  chain Abundance Richness      CPK   Entropy  Clonality
+1   IGH         0        0      NaN 0.0000000 1.00000000
+2   IGK        16        9 562.5000 2.1006789 0.04393982
+3   IGL         9        3 333.3333 0.6837389 0.37763403
+4   TRA         0        0      NaN 0.0000000 1.00000000
+5   TRB         5        3 600.0000 0.9502705 0.13502648
+6   TRG         0        0      NaN 0.0000000 1.00000000
+7   TRD         0        0      NaN 0.0000000 1.00000000
+\end{verbatim}
+
+\hypertarget{salvando-as-tabelas-e-listas}{%
+\subsection{Salvando as tabelas e
+listas}\label{salvando-as-tabelas-e-listas}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# funcao para salvar cada dataframe individualmente}
+\NormalTok{salvar\_dataframes }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(lista, dir\_destino)\{}
+  \ControlFlowTok{for}\NormalTok{ (nome\_df }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(lista)) \{}
+\NormalTok{    arquivo }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(dir\_destino,}\StringTok{"/"}\NormalTok{, nome\_df, }\StringTok{".tsv"}\NormalTok{)}
+    \FunctionTok{write.table}\NormalTok{(lista[[nome\_df]], arquivo, }\AttributeTok{sep =} \StringTok{"}\SpecialCharTok{\textbackslash{}t}\StringTok{"}\NormalTok{, }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\# salva os dataframes como .tsv}
+\FunctionTok{salvar\_dataframes}\NormalTok{(calc\_tcrbcr\_sequencias, }\AttributeTok{dir\_destino =} \StringTok{"results\_pipeline\_report"}\NormalTok{)}
+\FunctionTok{salvar\_dataframes}\NormalTok{(calc\_tcrbcr\_clones, }\AttributeTok{dir\_destino =} \StringTok{"results\_pipeline\_clones"}\NormalTok{)}
+
+\CommentTok{\# salva as listas  }
+\FunctionTok{save}\NormalTok{(calc\_tcrbcr\_sequencias, }\AttributeTok{file =} \StringTok{"calc\_tcrbcr\_sequencias.RData"}\NormalTok{)}
+\FunctionTok{save}\NormalTok{(calc\_tcrbcr\_clones, }\AttributeTok{file =} \StringTok{"calc\_tcrbcr\_clones.RData"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+
+
+
+\end{document}
